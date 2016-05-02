@@ -15,7 +15,7 @@ public class Merge extends Thread{
             ReadEnd in3, ReadEnd in4, WriteEnd out){
         this.in = new ReadEnd[] {in1, in2, in3, in4};
         this.out = out;
-        
+        ThreadList.add(this);        
     }
     
     public void run(){

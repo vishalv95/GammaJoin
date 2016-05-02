@@ -17,6 +17,7 @@ public class Bloom extends Thread {
         this.mapOut = mapOut; 
         this.jkey = jkey;
         bitMap = BMap.makeBMap();
+        ThreadList.add(this);
         
     }
     

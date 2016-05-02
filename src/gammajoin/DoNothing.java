@@ -12,6 +12,8 @@ public class DoNothing extends Thread{
     public DoNothing(ReadEnd in, WriteEnd out){
         this.in = in;
         this.out = out;
+        
+        ThreadList.add(this);
     }
     
     public void run(){

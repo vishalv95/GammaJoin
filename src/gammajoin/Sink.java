@@ -9,6 +9,7 @@ public class Sink extends Thread {
     ReadEnd in;
     public Sink(ReadEnd in){
         this.in = in;
+        ThreadList.add(this);
     }
     
     public void run(){

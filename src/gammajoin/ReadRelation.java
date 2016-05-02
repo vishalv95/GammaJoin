@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gammajoin;
 
 import java.util.StringTokenizer;
@@ -13,10 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Scanner;
 
-/**
- *
- * @author Vishal
- */
 public class ReadRelation extends Thread {
     Relation rel;
     StringTokenizer st;
@@ -43,6 +34,8 @@ public class ReadRelation extends Thread {
             st.nextToken();
             
             c.setRelation(rel);
+            
+            ThreadList.add(this);
         } 
         
         //Handle exceptions

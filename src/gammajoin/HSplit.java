@@ -14,6 +14,7 @@ public class HSplit extends Thread{
         this.in = recordStream;
         this.out = new WriteEnd[] {out1,out2,out3,out4};
         this.jkey = jkey;
+        ThreadList.add(this);
     }
     
     public void run(){

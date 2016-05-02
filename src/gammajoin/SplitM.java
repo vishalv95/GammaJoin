@@ -12,6 +12,8 @@ public class SplitM extends Thread{
             WriteEnd mapOut3, WriteEnd mapOut4){
         this.mapIn = mapIn;
         this.mapOut = new WriteEnd[] {mapOut1, mapOut2, mapOut3, mapOut4};
+        ThreadList.add(this);
+
     }
     
     public void run(){

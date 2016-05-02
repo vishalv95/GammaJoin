@@ -16,6 +16,8 @@ public class BFilter extends Thread {
         this.tupleIn = tupleIn;
         this.tupleOut = tupleOut;
         this. jkey = jkey;
+        
+        ThreadList.add(this);
     }
     
     public void run(){

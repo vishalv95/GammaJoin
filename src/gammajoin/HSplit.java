@@ -28,7 +28,7 @@ public class HSplit extends Thread{
     public void run(){
         String input;
         try {
-            for(int counter = 0; true; counter++){
+            while(true){
                     input = in.readLine();
                     if(input == null) break;
                     out[hash(input)].println(input);

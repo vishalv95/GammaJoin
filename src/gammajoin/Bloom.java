@@ -52,7 +52,6 @@ public class Bloom extends Thread {
         catch (IOException e){
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }
-        
     }
     
     //TODO: Actually get the join key 

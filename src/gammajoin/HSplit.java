@@ -1,54 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gammajoin;
 
-import gammaSupport.ReportError;
+import gammaSupport.*;
+import basicConnector.*;
 import java.io.*;
 
-
-/**
- *
- * @author Vishal
- */
 public class HSplit extends Thread{
-    static final int STREAM_NUM = 4;
+    WriteEnd out[];
+    ReadEnd in; 
+    int jkey; 
     
-    PrintStream out[];
-    BufferedReader in; 
-    
-    public HSplit(BufferedReader recordStream, PrintStream out0,
-            PrintStream out1, PrintStream out2, PrintStream out3 ) {
+    public HSplit(int jkey, ReadEnd recordStream, WriteEnd out1,
+            WriteEnd out2, WriteEnd out3, WriteEnd out4) {
         this.in = recordStream;
-        this.out = new PrintStream[] {out0,out1,out2,out3};
+        this.out = new WriteEnd[] {out1,out2,out3,out4};
+        this.jkey = jkey;
     }
     
     public void run(){
-        String input;
+        Tuple input;
         try {
             while(true){
-                    input = in.readLine();
+                    input = in.getNextTuple();
                     if(input == null) break;
-                    out[hash(input)].println(input);
-                    out[hash(input)].flush();
+                    out[hash(input, jkey)].putNextTuple(input);
             }
-
-            for(PrintStream outStream : out) {
-                outStream.flush();
-                outStream.close();
-            }
+            for(WriteEnd outStream : out) outStream.close();
         }
         
-        catch (IOException e) {
+        catch (Exception e) {
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }  
         
     }
     
-    public int hash(String jkey){
-        return (Math.abs(jkey.hashCode()) % STREAM_NUM);
+    public int hash(Tuple t, int jkey){
+        return (Math.abs(t.get(jkey).hashCode()) % BMap.splitLen);
     }
-    
 }

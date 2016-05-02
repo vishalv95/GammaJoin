@@ -1,26 +1,26 @@
 package gammajoin;
 
-import gammaSupport.ReportError;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintStream;
+import basicConnector.*;
+import gammaSupport.*;
+import java.io.*;
+
 
 public class Sink extends Thread {
-    BufferedReader in;
-    public Sink(BufferedReader in){
+    ReadEnd in;
+    public Sink(ReadEnd in){
         this.in = in;
     }
     
     public void run(){
-        String input;
+        Tuple input;
         try{
             while(true){
-                input = in.readLine();
+                input = in.getNextTuple();
                 if(input == null) break;
             }
         }
         
-        catch (IOException e) {
+        catch (Exception e) {
             ReportError.msg(this.getClass().getName() + e);
         }
     }

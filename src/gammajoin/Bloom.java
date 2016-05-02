@@ -1,29 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gammajoin;
 
 import java.io.*;
-import gammaSupport.BMap;
-import gammaSupport.ReportError;
+import gammaSupport.*;
+import basicConnector.*;
 
-/**
- *
- * @author Vishal
- */
 public class Bloom extends Thread {
-    BufferedReader in; 
-    PrintStream tupleOut;
-    PrintStream mapOut;
+    ReadEnd in; 
+    WriteEnd tupleOut;
+    WriteEnd mapOut;
+    int jkey;
     
     BMap bitMap;
     
-    public Bloom(BufferedReader in, PrintStream tupleOut, PrintStream mapOut){
+    public Bloom(int jkey, ReadEnd in, WriteEnd tupleOut, WriteEnd mapOut){
         this.tupleOut = tupleOut;
         this.mapOut = mapOut; 
-        
+        this.jkey = jkey;
         bitMap = BMap.makeBMap();
         
     }
@@ -31,32 +23,24 @@ public class Bloom extends Thread {
     public void run(){
         String joinKey;
         try{
-            String input; 
+            Tuple input; 
             while(true){
-                input = in.readLine();
+                input = in.getNextTuple();
                 if(input == null) break; 
                 
                 //Bloom filter calculation 
-                joinKey = getJoinKey(input);
-                bitMap.setValue(joinKey, true);
-                
-                tupleOut.println(input);
-                tupleOut.flush();
+                bitMap.setValue(input.get(jkey), true);
+                tupleOut.putNextTuple(input);   
             }
-            tupleOut.flush();
             tupleOut.close();
             
-            mapOut.println(bitMap.getBloomFilter());
+            mapOut.putNextString(bitMap.getBloomFilter());
+            mapOut.close();
         }
         
-        catch (IOException e){
+        catch (Exception e){
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }
-    }
-    
-    //TODO: Actually get the join key 
-    public String getJoinKey(String input){
-        return input; 
     }
     
 //    public int rowHash(String jkey){

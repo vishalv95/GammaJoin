@@ -1,63 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gammajoin;
 
-import gammaSupport.BMap;
-import gammaSupport.ReportError;
+import basicConnector.*;
+import gammaSupport.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
-/**
- *
- * @author Vishal
- */
 public class BFilter extends Thread {
-    BufferedReader mapIn;
-    BufferedReader tupleIn;
-    PrintStream tupleOut;
+    ReadEnd mapIn;
+    ReadEnd tupleIn;
+    WriteEnd tupleOut;
+    int jkey;
     
-    
-    public BFilter(BufferedReader mapIn, BufferedReader tupleIn, PrintStream tupleOut){
+    public BFilter(int jkey, ReadEnd mapIn, ReadEnd tupleIn, WriteEnd tupleOut){
         this.mapIn = mapIn;
         this.tupleIn = tupleIn;
         this.tupleOut = tupleOut;
-        
+        this. jkey = jkey;
     }
     
     public void run(){
         try {
-            String input; 
-            String joinKey;
-            BMap map = BMap.makeBMap(tupleIn.readLine());
+            Tuple input; 
+            String joinKeyValue;
+            BMap map = BMap.makeBMap(mapIn.getNextString());
+            
             while(true){
-                input = tupleIn.readLine();
+                input = tupleIn.getNextTuple();
                 if (input == null) break; 
-                joinKey = getJoinKey(input);
                 
-                if(map.getValue(input)){
-                    tupleOut.println(input);
-                    tupleOut.flush();
-                }
-                
+                joinKeyValue = input.get(jkey);
+                if(map.getValue(joinKeyValue))
+                    tupleOut.putNextTuple(input);
             } 
-            tupleOut.flush();
             tupleOut.close();
         }
         
-        catch (IOException e) {
+        catch (Exception e) {
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }
     }
-    
-    
-    public String getJoinKey(String input){
-        return input; 
-    }
-    
-    
 }

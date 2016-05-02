@@ -42,6 +42,7 @@ public class ReadRelation extends Thread {
             //Flush the separator
             st.nextToken();
             
+            c.setRelation(rel);
         } 
         
         //Handle exceptions

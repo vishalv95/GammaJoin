@@ -1,30 +1,31 @@
 package gammajoin;
 
-import java.io.*;
+import basicConnector.*;
 import gammaSupport.*;
+import java.io.*;
+
 
 public class DoNothing extends Thread{
-    BufferedReader in; 
-    PrintStream out;
-    public DoNothing(BufferedReader in, PrintStream out){
+    ReadEnd in; 
+    WriteEnd out;
+    
+    public DoNothing(ReadEnd in, WriteEnd out){
         this.in = in;
         this.out = out;
     }
     
     public void run(){
-        String input;
+        Tuple input;
         try{
             while(true){
-                input = in.readLine();
+                input = in.getNextTuple();
                 if(input == null) break;
-                out.println(input);
-                out.flush();
+                out.putNextTuple(input);
             }
-            out.flush();
             out.close();
         }
         
-        catch (IOException e) {
+        catch (Exception e) {
             ReportError.msg(this.getClass().getName() + e);
         }
     }

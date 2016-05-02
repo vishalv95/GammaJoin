@@ -1,26 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gammajoin;
 
-import java.io.*;
+import basicConnector.*;
 import gammaSupport.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.*;
 
-/**
- *
- * @author Vishal
- */
 public class MergeM extends Thread{
-    BufferedReader[] mapIn;
-    PrintStream mapOut;
+    ReadEnd[] mapIn;
+    WriteEnd mapOut;
     
-    public MergeM(BufferedReader mapIn0, BufferedReader mapIn1, BufferedReader mapIn2, 
-            BufferedReader mapIn3, PrintStream mapOut){
-        this.mapIn = new BufferedReader[] {mapIn0, mapIn1, mapIn2, mapIn3};
+    public MergeM(ReadEnd mapIn0, ReadEnd mapIn1, ReadEnd mapIn2, 
+            ReadEnd mapIn3, WriteEnd mapOut){
+        this.mapIn = new ReadEnd[] {mapIn0, mapIn1, mapIn2, mapIn3};
         this.mapOut = mapOut;
     }
     
@@ -29,13 +19,14 @@ public class MergeM extends Thread{
         BMap mergeMap = BMap.makeBMap();
         try {
             for(int counter = 0; counter < BMap.splitLen; counter++){
-                input = mapIn[counter].readLine();
+                input = mapIn[counter].getNextString();
                 if(input == null) break; 
                 mergeMap = BMap.or(mergeMap, BMap.makeBMap(input));
             }
-            mapOut.println(mergeMap.getBloomFilter());
+            mapOut.putNextString(mergeMap.getBloomFilter());
+            mapOut.close();
         }        
-        catch (IOException e) {
+        catch (Exception e) {
                 ReportError.msg(this.getClass().getName() + e);
         }
     }

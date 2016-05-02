@@ -5,10 +5,16 @@
  */
 package gammajoin;
 
+import basicConnector.Connector;
+
 /**
  *
  * @author Vishal
  */
 public class HJoin extends Thread{
+
+    HJoin(Connector c1, Connector c2, int jk1, int jk2, Connector o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

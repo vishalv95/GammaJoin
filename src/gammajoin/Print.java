@@ -1,4 +1,4 @@
-package gammaJoin;
+package gammajoin;
 
 import basicConnector.*;
 import gammaSupport.*;

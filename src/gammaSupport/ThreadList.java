@@ -6,16 +6,18 @@ package gammaSupport;
 
 import basicConnector.Connector;
 import java.util.HashSet;
+import java.util.ArrayList;
 
 // this class contains a list of threads
 // finishing the last thread completes the computation
 public class ThreadList implements GammaConstants {
     static boolean debug = true;  // very useful for debugging! Keep it on always
 
-    static HashSet<Thread> tl;
-
+//    static HashSet<Thread> tl;
+    static ArrayList<Thread> tl;
     public static void init() {
-        tl = new HashSet<Thread>();
+//        tl = new HashSet<Thread>();
+        tl = new ArrayList<Thread>();
     }
 
     public static void add(Thread t) {
@@ -37,7 +39,6 @@ public class ThreadList implements GammaConstants {
                     System.err.println("Starting thread " + t.getClass().getName());
                 }
             }
-
             last.join();
         } catch (Exception e) {
             ReportError.msg("exception in ThreadList.run: " + e.getMessage());

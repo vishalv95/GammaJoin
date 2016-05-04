@@ -22,8 +22,10 @@ public class HSplit extends Thread{
         try {
             while(true){
                     input = in.getNextTuple();
+                    //System.out.println(input);
                     if(input == null) break;
                     out[hash(input, jkey)].putNextTuple(input);
+                    //System.out.println(hash(input, jkey));
             }
             for(WriteEnd outStream : out) outStream.close();
         }

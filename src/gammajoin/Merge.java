@@ -45,7 +45,7 @@ public class Merge extends Thread{
     
     void readInput(int line){
         Tuple trial;
-        if(input[line].equals(LAST))
+        if(LAST.equals(input[line]))
             return;
 
         try {

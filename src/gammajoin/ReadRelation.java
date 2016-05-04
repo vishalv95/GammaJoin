@@ -6,22 +6,22 @@ import basicConnector.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Scanner;
 
 public class ReadRelation extends Thread {
     Relation rel;
-    StringTokenizer st;
+    BufferedReader relReader;
     Connector connection;
     
-    public ReadRelation(String relation, Connector c){
+    public ReadRelation(String relation, Connector c) throws IOException{
         connection = c;
         try {
             //Read data from file to tokenizer
-            String textData = new Scanner(new File(relation + ".txt") ).useDelimiter("\\Z").next();
-            st = new StringTokenizer(textData, "\n");
-
-            //Read first line for field names
-            String[] fieldNames = st.nextToken().split(" ");
+            relReader = new BufferedReader(new FileReader(relation + ".txt"));
+            String textData = relReader.readLine();
+            
+            String[] fieldNames = textData.split("\\s+");
+            
+//#            StringTokenizer st = new StringTokenizer(textData);
             
             //Initialize table
             rel = new Relation(relation, fieldNames.length);
@@ -30,10 +30,14 @@ public class ReadRelation extends Thread {
             for (String field: fieldNames)
                 rel.addField(field);
             
-            //Flush the separator
-            st.nextToken();
+//#            while(st.hasMoreTokens()){
+//#                rel.addField(st.nextToken());
+//#            }
             
             c.setRelation(rel);
+            
+            //Flush the separator
+            relReader.readLine();
             
             ThreadList.add(this);
         } 
@@ -47,16 +51,18 @@ public class ReadRelation extends Thread {
     
     public void run(){
             //Print the rest of the tuples to the write end
-            while (st.hasMoreTokens()){
-                Tuple tup = Tuple.makeTupleFromFileData(rel, st.nextToken());
-                try {
+            String line;
+            try {
+                while (true){    
+                    line = relReader.readLine();
+                    if(line == null) break;
+                    Tuple tup = Tuple.makeTupleFromFileData(rel, line);
                     connection.getWriteEnd().putNextTuple(tup);
-                } 
-                
-                catch (Exception ex) {
-                    Logger.getLogger(ReadRelation.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        
+            
+            catch (Exception ex) {
+                    Logger.getLogger(ReadRelation.class.getName()).log(Level.SEVERE, null, ex);
+            } 
     }
 }

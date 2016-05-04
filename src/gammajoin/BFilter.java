@@ -29,7 +29,7 @@ public class BFilter extends Thread {
             while(true){
                 input = tupleIn.getNextTuple();
                 if (input == null) break; 
-                
+                System.out.println(input);
                 joinKeyValue = input.get(jkey);
                 if(map.getValue(joinKeyValue))
                     tupleOut.putNextTuple(input);

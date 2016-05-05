@@ -9,6 +9,7 @@ public class MergeM extends Thread{
     WriteEnd mapOut;
     
     public MergeM(Connector mapIn0, Connector mapIn1, Connector mapIn2, Connector mapIn3, Connector mapOut){
+        mapOut.setRelation(mapIn0.getRelation());
         this.mapIn = new ReadEnd[] {mapIn0.getReadEnd(), mapIn1.getReadEnd(), 
             mapIn2.getReadEnd(), mapIn3.getReadEnd()};
         this.mapOut = mapOut.getWriteEnd();

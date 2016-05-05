@@ -8,10 +8,17 @@ public class SplitM extends Thread{
     ReadEnd mapIn;
     WriteEnd[] mapOut; 
     
-    public SplitM(ReadEnd mapIn, WriteEnd mapOut1, WriteEnd mapOut2, 
-            WriteEnd mapOut3, WriteEnd mapOut4){
-        this.mapIn = mapIn;
-        this.mapOut = new WriteEnd[] {mapOut1, mapOut2, mapOut3, mapOut4};
+    public SplitM(Connector mapIn, Connector mapOut1, Connector mapOut2, 
+            Connector mapOut3, Connector mapOut4){
+        Relation rel = mapIn.getRelation();
+        mapOut1.setRelation(rel);
+        mapOut2.setRelation(rel);
+        mapOut3.setRelation(rel);
+        mapOut4.setRelation(rel);
+        
+        this.mapIn = mapIn.getReadEnd();
+        this.mapOut = new WriteEnd[] {mapOut1.getWriteEnd(), mapOut2.getWriteEnd(),
+            mapOut3.getWriteEnd(), mapOut4.getWriteEnd()};
         ThreadList.add(this);
 
     }

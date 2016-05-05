@@ -13,11 +13,12 @@ public class BloomSimulator extends Thread {
         this.mapOut = o.getWriteEnd();
         this.map = BMap.makeBMap();
         this.keys = new String[] { "10506", "10507", "10508", "10509", "10601", "10701", "10900","10800"};
+        ThreadList.add(this);
     }
     
     public void run(){
         try {
-            for (String key:keys)map.setValue(key, true);
+            for (String key:keys) map.setValue(key, true);
             mapOut.putNextString(map.getBloomFilter());
             mapOut.close();
         }

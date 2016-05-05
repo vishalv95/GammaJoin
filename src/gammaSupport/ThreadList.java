@@ -13,11 +13,11 @@ import java.util.ArrayList;
 public class ThreadList implements GammaConstants {
     static boolean debug = true;  // very useful for debugging! Keep it on always
 
-//    static HashSet<Thread> tl;
-    static ArrayList<Thread> tl;
+    static HashSet<Thread> tl;
+//    static ArrayList<Thread> tl;
     public static void init() {
-//        tl = new HashSet<Thread>();
-        tl = new ArrayList<Thread>();
+        tl = new HashSet<Thread>();
+//        tl = new ArrayList<Thread>();
     }
 
     public static void add(Thread t) {

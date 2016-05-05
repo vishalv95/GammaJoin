@@ -10,31 +10,29 @@ import java.util.logging.Logger;
 public class ReadRelation extends Thread {
     Relation rel;
     BufferedReader relReader;
-    Connector connection;
+    WriteEnd out;
     
     public ReadRelation(String relation, Connector c) throws IOException{
-        connection = c;
+        this.out = c.getWriteEnd();
         try {
             //Read data from file to tokenizer
-            relReader = new BufferedReader(new FileReader(relation + ".txt"));
+            relReader = new BufferedReader(new FileReader("tables/" + relation + ".txt"));
             String textData = relReader.readLine();
             
             String[] fieldNames = textData.split("\\s+");
             
-//#            StringTokenizer st = new StringTokenizer(textData);
-            
             //Initialize table
             rel = new Relation(relation, fieldNames.length);
             
+
             //Add field names
-            for (String field: fieldNames)
-                rel.addField(field);
-            
-//#            while(st.hasMoreTokens()){
-//#                rel.addField(st.nextToken());
-//#            }
-            
+            for (String field: fieldNames) rel.addField(field);
             c.setRelation(rel);
+//            StringTokenizer st = new StringTokenizer(textData);
+//            while(st.hasMoreTokens()){
+//                rel.addField(st.nextToken());
+//            }
+            
             
             //Flush the separator
             relReader.readLine();
@@ -57,8 +55,9 @@ public class ReadRelation extends Thread {
                     line = relReader.readLine();
                     if(line == null) break;
                     Tuple tup = Tuple.makeTupleFromFileData(rel, line);
-                    connection.getWriteEnd().putNextTuple(tup);
+                    out.putNextTuple(tup);
                 }
+                out.close();
             }
             
             catch (Exception ex) {

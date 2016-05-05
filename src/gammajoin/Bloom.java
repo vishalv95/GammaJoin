@@ -12,26 +12,27 @@ public class Bloom extends Thread {
     
     BMap bitMap;
     
-    public Bloom(int jkey, ReadEnd in, WriteEnd tupleOut, WriteEnd mapOut){
-        this.in = in; 
-        this.tupleOut = tupleOut;
-        this.mapOut = mapOut; 
+    public Bloom(Connector in, Connector tupleOut, Connector mapOut, int jkey){
+        tupleOut.setRelation(in.getRelation());
+        mapOut.setRelation(in.getRelation());
+        
+        this.in = in.getReadEnd(); 
+        this.tupleOut = tupleOut.getWriteEnd();
+        this.mapOut = mapOut.getWriteEnd(); 
         this.jkey = jkey;
-        bitMap = BMap.makeBMap();
+        this.bitMap = BMap.makeBMap();
+        
         ThreadList.add(this);
         
     }
     
     public void run(){
-        String joinKey;
+        Tuple input; 
         try{
-            Tuple input; 
+            
             while(true){
                 input = in.getNextTuple();
                 if(input == null) break; 
-                System.out.println(in.getRelation().getRelationName());
-                
-                System.out.println(input);
                 //Bloom filter calculation 
                 bitMap.setValue(input.get(jkey), true);
                 tupleOut.putNextTuple(input);   
@@ -46,12 +47,4 @@ public class Bloom extends Thread {
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }
     }
-    
-//    public int rowHash(String jkey){
-//        return (jkey.hashCode() % BMap.splitLen);
-//    }
-//    
-//    public int colHash(String jkey){
-//        return (jkey.hashCode() % BMap.mapSize);
-//    }
 }

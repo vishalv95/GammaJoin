@@ -27,7 +27,7 @@ public class ReadEnd  {
     // instance methods
     public Tuple getNextTuple() throws Exception {
         String ts = b.readLine();
-        if (ts == null) return null;
+        if(ts == null) return null;
         Tuple t = Tuple.makeTupleFromPipeData(ts);
         return t;
     }

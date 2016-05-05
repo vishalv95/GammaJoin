@@ -11,10 +11,12 @@ public class BFilter extends Thread {
     WriteEnd tupleOut;
     int jkey;
     
-    public BFilter(int jkey, ReadEnd mapIn, ReadEnd tupleIn, WriteEnd tupleOut){
-        this.mapIn = mapIn;
-        this.tupleIn = tupleIn;
-        this.tupleOut = tupleOut;
+    public BFilter(Connector mapIn, Connector tupleIn, Connector tupleOut, int jkey){
+        tupleOut.setRelation(tupleIn.getRelation());
+        
+        this.mapIn = mapIn.getReadEnd();
+        this.tupleIn = tupleIn.getReadEnd();
+        this.tupleOut = tupleOut.getWriteEnd();
         this. jkey = jkey;
         
         ThreadList.add(this);

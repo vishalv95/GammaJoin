@@ -9,10 +9,19 @@ public class HSplit extends Thread{
     ReadEnd in; 
     int jkey; 
     
-    public HSplit(int jkey, ReadEnd recordStream, WriteEnd out1,
-            WriteEnd out2, WriteEnd out3, WriteEnd out4) {
-        this.in = recordStream;
-        this.out = new WriteEnd[] {out1,out2,out3,out4};
+    public HSplit(Connector in, Connector out1,
+            Connector out2, Connector out3, Connector out4, int jkey) {
+        this.in = in.getReadEnd();
+        
+        Relation rel = in.getRelation();
+        out1.setRelation(rel);
+        out2.setRelation(rel);
+        out3.setRelation(rel);
+        out4.setRelation(rel);
+        
+        this.out = new WriteEnd[] {out1.getWriteEnd(),out2.getWriteEnd(),
+            out3.getWriteEnd(),out4.getWriteEnd()};
+        
         this.jkey = jkey;
         ThreadList.add(this);
     }

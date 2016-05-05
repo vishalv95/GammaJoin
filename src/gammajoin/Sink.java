@@ -7,8 +7,8 @@ import java.io.*;
 
 public class Sink extends Thread {
     ReadEnd in;
-    public Sink(ReadEnd in){
-        this.in = in;
+    public Sink(Connector in){
+        this.in = in.getReadEnd();
         ThreadList.add(this);
     }
     

@@ -13,7 +13,7 @@ public class HJoin extends Thread{
     int jk2;
     static boolean initialized = false; 
     
-    HJoin(Connector c1, Connector c2, int jk1, int jk2, Connector o) {
+    public HJoin(Connector c1, Connector c2, int jk1, int jk2, Connector o) {
         this.inTuple1 = c1.getReadEnd();
         this.inTuple2 = c2.getReadEnd();
         this.outTuple = o.getWriteEnd();

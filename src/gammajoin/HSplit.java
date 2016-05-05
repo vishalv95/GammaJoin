@@ -22,10 +22,8 @@ public class HSplit extends Thread{
         try {
             while(true){
                     input = in.getNextTuple();
-                    //System.out.println(input);
                     if(input == null) break;
-                    out[hash(input, jkey)].putNextTuple(input);
-                    //System.out.println(hash(input, jkey));
+                    out[BMap.myhash(input.get(jkey))].putNextTuple(input);
             }
             for(WriteEnd outStream : out) outStream.close();
         }
@@ -34,9 +32,5 @@ public class HSplit extends Thread{
             ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
         }  
         
-    }
-    
-    public int hash(Tuple t, int jkey){
-        return (Math.abs(t.get(jkey).hashCode()) % BMap.splitLen);
     }
 }

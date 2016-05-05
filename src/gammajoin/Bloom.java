@@ -13,6 +13,7 @@ public class Bloom extends Thread {
     BMap bitMap;
     
     public Bloom(int jkey, ReadEnd in, WriteEnd tupleOut, WriteEnd mapOut){
+        this.in = in; 
         this.tupleOut = tupleOut;
         this.mapOut = mapOut; 
         this.jkey = jkey;
@@ -28,6 +29,8 @@ public class Bloom extends Thread {
             while(true){
                 input = in.getNextTuple();
                 if(input == null) break; 
+                System.out.println(in.getRelation().getRelationName());
+                
                 System.out.println(input);
                 //Bloom filter calculation 
                 bitMap.setValue(input.get(jkey), true);

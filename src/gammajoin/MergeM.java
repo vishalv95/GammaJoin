@@ -8,8 +8,7 @@ public class MergeM extends Thread{
     ReadEnd[] mapIn;
     WriteEnd mapOut;
     
-    public MergeM(ReadEnd mapIn0, ReadEnd mapIn1, ReadEnd mapIn2, 
-            ReadEnd mapIn3, WriteEnd mapOut){
+    public MergeM(ReadEnd mapIn0, ReadEnd mapIn1, ReadEnd mapIn2, ReadEnd mapIn3, WriteEnd mapOut){
         this.mapIn = new ReadEnd[] {mapIn0, mapIn1, mapIn2, mapIn3};
         this.mapOut = mapOut;
         ThreadList.add(this);

@@ -13,6 +13,7 @@ public class HJoin extends Thread{
     int jk2;
     
     public HJoin(Connector c1, Connector c2, int jk1, int jk2, Connector o) {
+        o.setRelation(Relation.join(c1.getRelation(), c2.getRelation(), jk1, jk2));
         this.inTuple1 = c1.getReadEnd();
         this.inTuple2 = c2.getReadEnd();
         this.outTuple = o.getWriteEnd();

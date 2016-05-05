@@ -12,6 +12,8 @@ public class Merge extends Thread{
     
     
     public Merge(Connector in1, Connector in2, Connector in3, Connector in4, Connector out){
+        out.setRelation(in1.getRelation());
+        
         this.in = new ReadEnd[] {in1.getReadEnd(), in2.getReadEnd(), in3.getReadEnd(), in4.getReadEnd()};
         this.out = out.getWriteEnd();
         ThreadList.add(this);        

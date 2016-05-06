@@ -3,7 +3,8 @@ package gammajoin;
 import basicConnector.*;
 import gammaSupport.*;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class HJoin extends Thread{
     ReadEnd inTuple1;
@@ -27,41 +28,41 @@ public class HJoin extends Thread{
     }
     
     public void run(){
-        ArrayList<Tuple> relATuples = new ArrayList<Tuple>();
-        ArrayList<Tuple> relBTuples = new ArrayList<Tuple>();
-        Tuple input; 
+        HashMap<String, LinkedList<Tuple>> relATuples = new HashMap<String, LinkedList<Tuple>>();
+        
+        Tuple input;
+        Tuple bTuple;
         Tuple output;
+        LinkedList ll;
         try{
             while(true){
                 input = inTuple1.getNextTuple();
                 if(input == null) break;
-                relATuples.add(input);
+                if(relATuples.get(input.get(jk1)) == null)
+                    ll = new LinkedList<Tuple>();
+                else
+                    ll = relATuples.get(input.get(jk1));
+                
+                ll.add(input);
+                relATuples.put(input.get(jk1), ll);
+                
             }
+            
             while(true){
-                input = inTuple2.getNextTuple();
-                if(input == null) break;
-                relBTuples.add(input);
-            }
-        }
-        catch (Exception e) {
-            ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
-        }  
-        finally{
-            for(Tuple aTuple: relATuples){
-                for(Tuple bTuple: relBTuples){
-//                  Shouldn't this throw Array out of bounds if the tuples aren't joinable? 
-                    try {                    
-                        if(aTuple.get(jk1).equals(bTuple.get(jk2))){
-                            output = Tuple.join(aTuple, bTuple, jk1, jk2);
-                            outTuple.putNextTuple(output);
-                        }
-                    } 
-                    catch (Exception e) {
-                        continue;
+                bTuple = inTuple2.getNextTuple();
+                if(bTuple == null) break;
+                if(relATuples.get(bTuple.get(jk2)) == null) continue;
+                else {
+                    for(Tuple aTuple: relATuples.get(bTuple.get(jk2))){
+                        output = Tuple.join(aTuple, bTuple, jk1, jk2);
+                        outTuple.putNextTuple(output);
                     }
                 }
             }
             outTuple.close();
         }
+        catch (Exception e) {
+            ReportError.msg(this.getClass().getName() + " WriteReversedThread run: " + e);
+        }  
     }
 } 

@@ -32,6 +32,7 @@ public class Bloom extends Thread {
             
             while(true){
                 input = in.getNextTuple();
+
                 if(input == null) break; 
                 //Bloom filter calculation 
                 bitMap.setValue(input.get(jkey), true);
